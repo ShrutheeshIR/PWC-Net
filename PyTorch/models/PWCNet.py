@@ -195,16 +195,21 @@ class PWCDCNet(nn.Module):
 
         corr6 = self.corr(c16, c26) 
         corr6 = self.leakyRELU(corr6)   
-
+        print(corr6.shape)
 
         x = torch.cat((self.conv6_0(corr6), corr6),1)
+        # print(x.shape)
         x = torch.cat((self.conv6_1(x), x),1)
         x = torch.cat((self.conv6_2(x), x),1)
         x = torch.cat((self.conv6_3(x), x),1)
         x = torch.cat((self.conv6_4(x), x),1)
+        print("Conv6", x.shape)
         flow6 = self.predict_flow6(x)
+        print(flow6.shape)
         up_flow6 = self.deconv6(flow6)
+        print(up_flow6.shape)
         up_feat6 = self.upfeat6(x)
+        print(up_feat6.shape)
 
         
         warp5 = self.warp(c25, up_flow6*0.625)
